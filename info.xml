@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jtlshopplugin>
+    <Name>Bikepark Routen</Name>
+    <Description>The JTL Shop plugin “Bikepark Routes” is intended to be a powerful, modular extension module for JTL Shop 5 that meets the specific requirements of modern bike parks for flexible, multilingual, and up-to-date route communication.</Description>
+    <Author>bbfdesign.de</Author>
+    <URL>https://www.bbfdesign.de</URL>
+    <PluginID>bbfdesign_bikepark_routes</PluginID>
+    <XMLVersion>100</XMLVersion>
+    <MinShopVersion>5.0.0</MinShopVersion>
+    <Icon></Icon>
+    <Version>1.0.0</Version>
+    <CreateDate>2025-11-14</CreateDate>
+    <Install>
+        <Adminmenu>
+            <Customlink sort="1">
+                <Name>Einstellungen</Name>
+                <Filename>admin.tpl</Filename>
+            </Customlink>
+        </Adminmenu>
+      <Locales>
+	  		<Variable>
+				<Name>active</Name>
+				<VariableLocalized iso="GER">Aktive</VariableLocalized>
+				<VariableLocalized iso="ENG">Active</VariableLocalized>
+				<Description>Aktive</Description>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="GER">Erfolgreich aktualisiert</VariableLocalized>
+				<VariableLocalized iso="ENG">Updated successfully</VariableLocalized>
+				<Description>Updated successfully</Description>
+				<Name>updated_successfully</Name>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="GER">Erfolgreich gelöscht</VariableLocalized>
+				<VariableLocalized iso="ENG">Deleted successfully</VariableLocalized>
+				<Description>Deleted successfully</Description>
+				<Name>deleted_successfully</Name>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="GER">Erfolgreich hinzugefügt</VariableLocalized>
+				<VariableLocalized iso="ENG">Added successfully</VariableLocalized>
+				<Description>Added successfully</Description>
+				<Name>added_successfully</Name>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="GER">Da ist etwas schiefgelaufen</VariableLocalized>
+				<VariableLocalized iso="ENG">Something went wrong</VariableLocalized>
+				<Description>Something went wrong</Description>
+				<Name>something_went_wrong</Name>
+			</Variable>
+			<Variable>
+				<Name>status</Name>
+				<VariableLocalized iso="GER">Status</VariableLocalized>
+				<VariableLocalized iso="ENG">Status</VariableLocalized>
+				<Description>Status</Description>
+			</Variable>
+			<Variable>
+				<Name>plugin_status</Name>
+				<VariableLocalized iso="ENG">Frontend Pluginstatus</VariableLocalized>
+				<VariableLocalized iso="GER">Pluginstatus im Frontend</VariableLocalized>
+				<Description>Pluginstatus im Frontend</Description>
+			</Variable>
+			<Variable>
+				<Name>in_active</Name>
+				<VariableLocalized iso="GER">Inaktiv</VariableLocalized>
+				<VariableLocalized iso="ENG">In-active</VariableLocalized>
+				<Description>Inaktiv</Description>
+			</Variable>
+			<Variable>
+				<Name>activated</Name>
+				<VariableLocalized iso="ENG">Activated</VariableLocalized>
+				<VariableLocalized iso="GER">Aktiviert</VariableLocalized>
+				<Description>Aktiviert</Description>
+			</Variable>
+			<Variable>
+				<Name>deactivated</Name>
+				<VariableLocalized iso="ENG">Deactivated</VariableLocalized>
+				<VariableLocalized iso="GER">Deaktiviert</VariableLocalized>
+				<Description>Deaktiviert</Description>
+			</Variable>
+			<Variable>
+				<Name>close</Name>
+				<VariableLocalized iso="GER">Schließen</VariableLocalized>
+				<VariableLocalized iso="ENG">Close</VariableLocalized>
+				<Description>Schließen</Description>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="ENG">Settings</VariableLocalized>
+				<VariableLocalized iso="GER">Einstellungen</VariableLocalized>
+				<Description>Einstellungen</Description>
+				<Name>settings</Name>
+			</Variable>
+			<Variable>
+				<Name>save</Name>
+				<VariableLocalized iso="GER">Speichern</VariableLocalized>
+				<VariableLocalized iso="ENG">Save</VariableLocalized>
+				<Description>Save</Description>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="ENG">Settings</VariableLocalized>
+				<VariableLocalized iso="GER">Einstellungen</VariableLocalized>
+				<Description>Einstellungen</Description>
+				<Name>settings</Name>
+			</Variable>
+			<Variable>
+				<VariableLocalized iso="ENG">Details</VariableLocalized>
+				<VariableLocalized iso="GER">Einzelheiten</VariableLocalized>
+				<Name>details</Name>
+				<Description>Einzelheiten</Description>
+			</Variable>
+			<Variable>
+				<Name>yes</Name>
+				<VariableLocalized iso="GER">Ja</VariableLocalized>
+				<VariableLocalized iso="ENG">Yes</VariableLocalized>
+				<Description>Ja</Description>
+			</Variable>
+			<Variable>
+				<Name>no</Name>
+				<VariableLocalized iso="GER">Nein</VariableLocalized>
+				<VariableLocalized iso="ENG">No</VariableLocalized>
+				<Description>Nein</Description>
+			</Variable>
+			<Variable>
+				<Name>gallery</Name>
+				<VariableLocalized iso="GER">Gallery</VariableLocalized>
+				<VariableLocalized iso="ENG">Gallery</VariableLocalized>
+				<Description>Gallery</Description>
+			</Variable>
+			<Variable>
+				<Name>videos</Name>
+				<VariableLocalized iso="GER">Videos</VariableLocalized>
+				<VariableLocalized iso="ENG">Videos</VariableLocalized>
+				<Description>Videos</Description>
+			</Variable>
+			<Variable>
+				<Name>geo</Name>
+				<VariableLocalized iso="GER">Geo</VariableLocalized>
+				<VariableLocalized iso="ENG">Geo</VariableLocalized>
+				<Description>Geo</Description>
+			</Variable>
+			<Variable>
+				<Name>tags</Name>
+				<VariableLocalized iso="GER">Tags</VariableLocalized>
+				<VariableLocalized iso="ENG">Tags</VariableLocalized>
+				<Description>Tags</Description>
+			</Variable>
+			<Variable>
+				<Name>tag_map</Name>
+				<VariableLocalized iso="GER">Tags Map</VariableLocalized>
+				<VariableLocalized iso="ENG">Tags Map</VariableLocalized>
+				<Description>Tags Map</Description>
+			</Variable>
+			<Variable>
+				<Name>route</Name>
+				<VariableLocalized iso="ENG">Route</VariableLocalized>
+				<VariableLocalized iso="GER">Route</VariableLocalized>
+				<Description>Route</Description>
+			</Variable>
+			<Variable>
+				<Name>routes</Name>
+				<VariableLocalized iso="ENG">Routes</VariableLocalized>
+				<VariableLocalized iso="GER">STRECKEN</VariableLocalized>
+				<Description>STRECKEN</Description>
+			</Variable>
+			<Variable>
+				<Name>very_easy</Name>
+				<VariableLocalized iso="GER">Sehr einfach</VariableLocalized>
+				<VariableLocalized iso="ENG">Very easy</VariableLocalized>
+				<Description>Sehr einfach</Description>
+			</Variable>
+			<Variable>
+				<Name>easy</Name>
+				<VariableLocalized iso="GER">Einfach</VariableLocalized>
+				<VariableLocalized iso="ENG">Easy</VariableLocalized>
+				<Description>Einfach</Description>
+			</Variable>
+			<Variable>
+				<Name>medium</Name>
+				<VariableLocalized iso="GER">Mittel</VariableLocalized>
+				<VariableLocalized iso="ENG">Medium</VariableLocalized>
+				<Description>Mittel</Description>
+			</Variable>
+			<Variable>
+				<Name>difficult</Name>
+				<VariableLocalized iso="GER">Schwierig</VariableLocalized>
+				<VariableLocalized iso="ENG">Difficult</VariableLocalized>
+				<Description>Schwierig</Description>
+			</Variable>
+			<Variable>
+				<Name>open</Name>
+				<VariableLocalized iso="GER">Offen</VariableLocalized>
+				<VariableLocalized iso="ENG">Open</VariableLocalized>
+				<Description>Offen</Description>
+			</Variable>
+			<Variable>
+				<Name>partially_open</Name>
+				<VariableLocalized iso="GER">Teilweise offen</VariableLocalized>
+				<VariableLocalized iso="ENG">Partially open</VariableLocalized>
+				<Description>Teilweise offen</Description>
+			</Variable>
+			<Variable>
+				<Name>closed</Name>
+				<VariableLocalized iso="GER">Geschlossen</VariableLocalized>
+				<VariableLocalized iso="ENG">Closed</VariableLocalized>
+				<Description>Geschlossen</Description>
+			</Variable>
+			<Variable>
+				<Name>pq_selector</Name>
+				<VariableLocalized iso="ENG">PHP query selector</VariableLocalized>
+				<VariableLocalized iso="GER">Korrespondierendes Element für die Infobox</VariableLocalized>
+				<Description>Korrespondierendes Element für die Infobox</Description>
+			</Variable>
+			<Variable>
+				<Name>pq_method</Name>
+				<VariableLocalized iso="ENG">PHP method</VariableLocalized>
+				<VariableLocalized iso="GER">Art der Einbindung</VariableLocalized>
+				<Description>Art der Einbindung</Description>
+			</Variable>
+			<Variable>
+				<Name>prepend</Name>
+				<VariableLocalized iso="ENG">prepend</VariableLocalized>
+				<VariableLocalized iso="GER">fügt das Element am Anfang hinzu.</VariableLocalized>
+				<Description>fügt das Element am Anfang hinzu.</Description>
+			</Variable>
+			<Variable>
+				<Name>append</Name>
+				<VariableLocalized iso="ENG">append</VariableLocalized>
+				<VariableLocalized iso="GER">fügt das Element am Ende hinzu.</VariableLocalized>
+				<Description>fügt das Element am Ende hinzu.</Description>
+			</Variable>
+			<Variable>
+				<Name>after</Name>
+				<VariableLocalized iso="ENG">after</VariableLocalized>
+				<VariableLocalized iso="GER">fügt das Element nach dem Ziel-Element ein.</VariableLocalized>
+				<Description>fügt das Element nach dem Ziel-Element ein.</Description>
+			</Variable>
+			<Variable>
+				<Name>before</Name>
+				<VariableLocalized iso="ENG">before</VariableLocalized>
+				<VariableLocalized iso="GER">fügt das Element vor dem Ziel-Element ein.</VariableLocalized>
+				<Description>fügt das Element vor dem Ziel-Element ein.</Description>
+			</Variable>
+			<Variable>
+				<Name>replaceWith</Name>
+				<VariableLocalized iso="ENG">replaceWith</VariableLocalized>
+				<VariableLocalized iso="GER">Ersetzt das Element</VariableLocalized>
+				<Description>Ersetzt das Element</Description>
+			</Variable>
+			<Variable>
+				<Name>insertAfter</Name>
+				<VariableLocalized iso="GER">insertAfter</VariableLocalized>
+				<VariableLocalized iso="ENG">insertAfter</VariableLocalized>
+				<Description>insertAfter</Description>
+			</Variable>
+			<Variable>
+				<Name>insertBefore</Name>
+				<VariableLocalized iso="GER">insertBefore</VariableLocalized>
+				<VariableLocalized iso="ENG">insertBefore</VariableLocalized>
+				<Description>insertBefore</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_emptyTable</Name>
+				<VariableLocalized iso="ENG">No data available in the table</VariableLocalized>
+				<VariableLocalized iso="GER">Keine Daten in der Tabelle verfügbar</VariableLocalized>
+				<Description>Keine Daten in der Tabelle verfügbar</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_lengthMenu</Name>
+				<VariableLocalized iso="ENG">Show _MENU_ entries</VariableLocalized>
+				<VariableLocalized iso="GER">Zeige _MENU_ Einträge</VariableLocalized>
+				<Description>Zeige _MENU_ Einträge</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_info</Name>
+				<VariableLocalized iso="ENG">Showing _START_ to _END_ of _TOTAL_ entries</VariableLocalized>
+				<VariableLocalized iso="GER">Zeige _START_ bis _END_ von _TOTAL_ Einträgen</VariableLocalized>
+				<Description>Zeige _START_ bis _END_ von _TOTAL_ Einträgen</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_zeroRecords</Name>
+				<VariableLocalized iso="ENG">No matching records found</VariableLocalized>
+				<VariableLocalized iso="GER">Keine passenden Datensätze gefunden</VariableLocalized>
+				<Description>Keine passenden Datensätze gefunden</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_search</Name>
+				<VariableLocalized iso="ENG">Search</VariableLocalized>
+				<VariableLocalized iso="GER">Suche</VariableLocalized>
+				<Description>Suche</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_sInfoEmpty</Name>
+				<VariableLocalized iso="ENG">Showing 0 to 0 of 0 data records</VariableLocalized>
+				<VariableLocalized iso="GER">Zeigt 0 bis 0 von 0 Datensätzen</VariableLocalized>
+				<Description>Zeigt 0 bis 0 von 0 Datensätzen</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_sInfoFiltered</Name>
+				<VariableLocalized iso="ENG">(filtered from _MAX_ total records)</VariableLocalized>
+				<VariableLocalized iso="GER">(gefiltert aus _MAX_ Gesamtsätzen)</VariableLocalized> 
+				<Description>(gefiltert aus _MAX_ Gesamtsätzen)</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_previous</Name>
+				<VariableLocalized iso="ENG">Previous</VariableLocalized>
+				<VariableLocalized iso="GER">Vorherige</VariableLocalized>
+				<Description>Vorherige</Description>
+			</Variable>
+			<Variable>
+				<Name>datatable_next</Name>
+				<VariableLocalized iso="ENG">Next</VariableLocalized>
+				<VariableLocalized iso="GER">Weiter</VariableLocalized>
+				<Description>Weiter</Description>
+			</Variable>
+			<Variable>
+				<Name>select2_inputTooShort</Name>
+				<VariableLocalized iso="ENG">The results could not be loaded</VariableLocalized>
+				<VariableLocalized iso="GER">Die Ergebnisse konnten nicht geladen werden</VariableLocalized>
+				<Description>Die Ergebnisse konnten nicht geladen werden</Description>
+			</Variable>
+			<Variable>
+				<Name>select2_loadingMore</Name>
+				<VariableLocalized iso="ENG">The results could not be loaded</VariableLocalized>
+				<VariableLocalized iso="GER">Die Ergebnisse konnten nicht geladen werden</VariableLocalized>
+				<Description>Die Ergebnisse konnten nicht geladen werden</Description>
+			</Variable>
+			<Variable>
+				<Name>select2_noResults</Name>
+				<VariableLocalized iso="ENG">No results found</VariableLocalized>
+				<VariableLocalized iso="GER">Keine Ergebnisse gefunden</VariableLocalized>
+				<Description>Keine Ergebnisse gefunden</Description>
+			</Variable>
+			<Variable>
+				<Name>select2_searching</Name>
+				<VariableLocalized iso="ENG">Searching</VariableLocalized>
+				<VariableLocalized iso="GER">Suche auf</VariableLocalized>
+				<Description>Suche auf</Description>
+			</Variable>
+			<Variable>
+				<Name>select2_errorLoading</Name>
+				<VariableLocalized iso="ENG">The results could not be loaded</VariableLocalized>
+				<VariableLocalized iso="GER">Die Ergebnisse konnten nicht geladen werden</VariableLocalized>
+				<Description>Die Ergebnisse konnten nicht geladen werden</Description>
+			</Variable>
+			<Variable>
+				<Name>status</Name>
+				<VariableLocalized iso="ENG">Status</VariableLocalized>
+				<VariableLocalized iso="GER">Status</VariableLocalized>
+				<Description>Active / Inactive status</Description>
+			</Variable>
+			<Variable>
+				<Name>inactive</Name>
+				<VariableLocalized iso="ENG">Inactive</VariableLocalized>
+				<VariableLocalized iso="GER">Inaktiv</VariableLocalized>
+				<Description>Label for inactive rule</Description>
+			</Variable>
+			<Variable>
+				<Name>start_date</Name>
+				<VariableLocalized iso="ENG">Start Date</VariableLocalized>
+				<VariableLocalized iso="GER">Startdatum</VariableLocalized>
+				<Description>Rule start date</Description>
+			</Variable>
+			<Variable>
+				<Name>end_date</Name>
+				<VariableLocalized iso="ENG">End Date</VariableLocalized>
+				<VariableLocalized iso="GER">Enddatum</VariableLocalized>
+				<Description>Rule end date</Description>
+			</Variable>
+			<Variable>
+				<Name>action</Name>
+				<VariableLocalized iso="ENG">Action</VariableLocalized>
+				<VariableLocalized iso="GER">Aktion</VariableLocalized>
+				<Description>Action buttons (edit/delete)</Description>
+			</Variable>
+        </Locales>
+    </Install>
+</jtlshopplugin>

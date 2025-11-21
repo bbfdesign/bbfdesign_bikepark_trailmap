@@ -1,0 +1,15 @@
+{
+  "name": "bbfdesign/bbfdesign_bikepark_routes",
+  "description": "Der Brutto-Netto-Umschalter bietet Ihren Shopbesuchern die Möglichkeit, zwischen der Anzeige von Bruttopreisen für Privatkunden und Nettopreisen für Gewerbetreibende zu wählen. Diese Funktion sorgt dafür, dass die Preisansicht im Shop flexibel und passend zur Kundengruppe dargestellt wird. Sobald das Plugin korrekt konfiguriert ist, wird die Umschaltoption im Frontend automatisch angezeigt und die Preise dynamisch entsprechend der Auswahl des Nutzers angepasst. Dadurch verbessern Sie die Benutzererfahrung und stellen sicher, dass beide Kundengruppen die passenden Preisinformationen erhalten.",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "BbfdesignBikeParkRoutes\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  }
+}
