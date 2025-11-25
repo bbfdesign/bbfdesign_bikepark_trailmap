@@ -51,12 +51,12 @@ class Route
         ];
     }
 
-    public function getAll(): array | bool
+    public function getAll($withAssociated = false): array | bool
     {
         $sql = 'SELECT * FROM ' . self::TABLE . ' ORDER BY sequence ASC';
         $routes =  $this->db->queryPrepared($sql, [], ReturnType::ARRAY_OF_ASSOC_ARRAYS);
         if ($routes) {
-            foreach ($routes as $route) {
+            foreach ($routes as $i => $route) {
                 $route['tags'] = $this->db->queryPrepared(
                     'SELECT t.* 
                         FROM ' . self::TABLE_TAGS . ' t
@@ -65,6 +65,27 @@ class Route
                     ['id' => $route['id']],
                     ReturnType::ARRAY_OF_ASSOC_ARRAYS
                 );
+
+                if ($withAssociated) {
+                    $route['galleries'] = $this->db->queryPrepared(
+                        'SELECT * FROM ' . self::TABLE_GALLERY . ' WHERE route_id = :id ORDER BY sort_order ASC',
+                        ['id' => $route['id']],
+                        ReturnType::ARRAY_OF_ASSOC_ARRAYS
+                    );
+
+                    $route['videos'] = $this->db->queryPrepared(
+                        'SELECT * FROM ' . self::TABLE_VIDEOS . ' WHERE route_id = :id',
+                        ['id' => $route['id']],
+                        ReturnType::ARRAY_OF_ASSOC_ARRAYS
+                    );
+
+                    $route['geo'] = $this->db->queryPrepared(
+                        'SELECT * FROM ' . self::TABLE_GEO . ' WHERE route_id = :id',
+                        ['id' => $route['id']],
+                        ReturnType::SINGLE_ASSOC_ARRAY
+                    );
+                }
+                $routes[$i] = $route;
             }
             return $routes;
         }

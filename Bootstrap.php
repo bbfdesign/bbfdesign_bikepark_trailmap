@@ -70,6 +70,12 @@ class Bootstrap extends Bootstrapper
             [$bikeparkRouteController, 'getBikeRouteDetails'],
             'getBikeRouteDetailsRoute',
         );
+
+        $router->addRoute(
+            '/bikepark/trakmaps',
+            [$bikeparkRouteController, 'bikeparkTrakmaps'],
+            'bikeparkTrakmapsRoute',
+        );
     }
 
     public function installed()

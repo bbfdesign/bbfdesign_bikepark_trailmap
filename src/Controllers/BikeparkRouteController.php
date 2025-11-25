@@ -6,8 +6,10 @@ namespace BbfdesignBikeParkRoutes\Controllers;
 
 use BbfdesignBikeParkRoutes\Models\Route;
 use BbfdesignBikeParkRoutes\PluginHelper;
+use JTL\Link\Link;
 use JTL\Plugin\Helper;
 use JTL\Router\Controller\AbstractController;
+use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -49,6 +51,52 @@ class BikeparkRouteController extends AbstractController
         }
 
         return new JsonResponse($response, $statusCode);
+    }
+
+
+    public function bikeparkTrakmaps(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
+    {
+        $this->smarty = $smarty;
+        Shop::setPageType(\PAGE_PLUGIN);
+        $this->init();
+        $this->preRender();
+
+        $link = new Link($this->db);
+        $link->setLinkType(\LINKTYP_PLUGIN);
+
+        $tpl = \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend/template/trackmaps.tpl';
+        $frontedUrl = URL_SHOP . '/' . \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend';
+
+        $plugin = Helper::getPluginById(PluginHelper::PLUGIN_ID);
+        $routeModel = new Route($plugin);
+
+        $routes = $routeModel->getAll(withAssociated: true);
+
+        // remove routes that don't have an associated geo entry
+        if (is_array($routes) && count($routes)) {
+            foreach ($routes as $k => $routeItem) {
+                if (empty($routeItem['geo']) || !isset($routeItem['geo']['id'])) {
+                    unset($routes[$k]);
+                }
+            }
+            $routes = array_values($routes);
+        }
+        $difficultyLabels = $routeModel->getDifficultyLevels();
+        $availabilityLabels = $routeModel->getAvailabilityStatuses();
+        $routesByDifficulty = $routeModel->getRoutesByDifficulty();
+
+        return $this->smarty
+            ->assign([
+                'Link' => $link,
+                'cPluginTemplate' => $tpl,
+                'frontedUrl'    => $frontedUrl,
+                'nFullscreenTemplate' => 1,
+                'routes'            => $routes,
+                'routesByDifficulty' => $routesByDifficulty,
+                'difficultyLabels'  => $difficultyLabels,
+                'availabilityLabels' => $availabilityLabels,
+            ])
+            ->getResponse('layout/index.tpl');
     }
 
     public function getResponse(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
