@@ -90,7 +90,7 @@ class BikeparkRouteController extends AbstractController
                 'Link' => $link,
                 'cPluginTemplate' => $tpl,
                 'frontedUrl'    => $frontedUrl,
-                'nFullscreenTemplate' => 1,
+                // 'nFullscreenTemplate' => 1,
                 'routes'            => $routes,
                 'routesByDifficulty' => $routesByDifficulty,
                 'difficultyLabels'  => $difficultyLabels,

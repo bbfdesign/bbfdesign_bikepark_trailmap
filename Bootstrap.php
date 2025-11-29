@@ -15,6 +15,8 @@ use BbfdesignBikeParkRoutes\Controllers\Admin\AjaxController as AdminAjaxControl
 use BbfdesignBikeParkRoutes\Controllers\Admin\RouteController;
 use BbfdesignBikeParkRoutes\Controllers\BikeparkRouteController;
 use BbfdesignBikeParkRoutes\Hooks\AfterAddToCart;
+use BbfdesignBikeParkRoutes\Hooks\AfterSmartyInitialize;
+use BbfdesignBikeParkRoutes\Hooks\IncludeJsCssAssets;
 use BbfdesignBikeParkRoutes\Hooks\SmartyOutputFilter;
 use BbfdesignBikeParkRoutes\Models\Setting;
 use BbfdesignBikeParkRoutes\PluginHelper;
@@ -43,6 +45,15 @@ class Bootstrap extends Bootstrapper
             $dispatcher->listen('shop.hook.' . \HOOK_SMARTY_OUTPUTFILTER, static function (array $args) use ($plugin, $pluginSettings) {
                 $hook = new SmartyOutputFilter($args, $plugin, $pluginSettings);
                 $hook->execute();
+            });
+
+            $dispatcher->listen('shop.hook.' . \HOOK_SMARTY_INC, static function (array $args) use ($plugin, $pluginSettings) {
+                $hook = new AfterSmartyInitialize($args, $plugin, $pluginSettings);
+                $hook->execute();
+            });
+
+            $dispatcher->listen('shop.hook.' . \HOOK_LETZTERINCLUDE_CSS_JS, static function (array $args) use ($plugin, $pluginSettings) {
+                (new IncludeJsCssAssets($args, $plugin, $pluginSettings))->execute();
             });
         }
 

@@ -12,12 +12,14 @@ var visibleDiff = {};
 var visibleStatus = {};
 
 /* INIT MAP */
-var map = L.map("map").setView([51.183691, 8.509673], 16);
+var map;
+if ($("#bikepark-trackmap-map").length) {
+  map = L.map("bikepark-trackmap-map").setView([51.183691, 8.509673], 16);
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-}).addTo(map);
-
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+  }).addTo(map);
+}
 var routeLayers = {};
 
 $(function () {
@@ -250,3 +252,20 @@ function updateMapVisibility() {
     }
   });
 }
+
+$(document).on("click", ".route-info", function () {
+  const url = $(this).data("details-url");
+
+  $.get(url, function (response) {
+    if (response.flag && response.content) {
+      $("#routeDetailsModal").html(response.content);
+      $("#routeDetailsModal").modal("show");
+
+      $("#routeDetailsModal").find("iframe").css({
+        width: "100%",
+        height: "auto",
+        maxWidth: "100%",
+      });
+    }
+  });
+});

@@ -97,12 +97,12 @@ class Migration20251314124500 extends Migration implements IMigration
 
     public function down()
     {
-        $this->execute("DROP TABLE IF EXISTS `" . Setting::TABLE . "`");
-        $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_ROUTE_TAGS . "`");
-        $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_TAGS . "`");
-        $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_GEO . "`");
-        $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_VIDEOS . "`");
-        $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_GALLERY . "`");
-        $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Setting::TABLE . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_ROUTE_TAGS . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_TAGS . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_GEO . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_VIDEOS . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE_GALLERY . "`");
+        // $this->execute("DROP TABLE IF EXISTS `" . Route::TABLE . "`");
     }
 }

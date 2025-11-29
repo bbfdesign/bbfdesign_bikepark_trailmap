@@ -52,25 +52,7 @@ class SmartyOutputFilter
             $this->pluginSettings[Setting::PLUGIN_STATUS]
         ) {
             $routeModel = new Route($this->plugin);
-            $difficultyLabels = $routeModel->getDifficultyLevels();
-            $difficultyIcons = [
-                'very_easy' => 'fa-circle text-success',
-                'easy'      => 'fa-circle text-primary',
-                'medium'    => 'fa-circle text-warning',
-                'difficult' => 'fa-circle text-danger'
-            ];
-            $routesByDifficulty = $routeModel->getRoutesByDifficulty();
-
-            $bikeparkRouteBanner = $this->smarty->fetch(
-                $this->plugin->getPaths()->getFrontendPath() . 'template/bikepark-route-banner.tpl',
-                [
-                    'routeModel'          => $routeModel,
-                    'langVars'            => $this->plugin->getLocalization(),
-                    'difficultyLabels'    => $difficultyLabels,
-                    'difficultyIcons'     => $difficultyIcons,
-                    'routesByDifficulty'  => $routesByDifficulty,
-                ]
-            );
+            $bikeparkRouteBanner = $routeModel->getRoutesBannerView($this->smarty);
 
             if ($bikeparkRouteBanner) {
                 $selector = $this->pluginSettings[Setting::ROUTE_WIDGET_SELECTOR];

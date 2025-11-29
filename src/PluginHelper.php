@@ -157,7 +157,6 @@ class PluginHelper
         return true;
     }
 
-
     public static function getDatatableLanguageVariables($pluginLocalization): array
     {
         $variables = [

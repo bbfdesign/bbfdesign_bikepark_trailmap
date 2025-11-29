@@ -1008,4 +1008,61 @@ class Route
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
+
+    public function getRoutesBannerView($smarty)
+    {
+        $difficultyLabels = $this->getDifficultyLevels();
+        $difficultyIcons = [
+            'very_easy' => 'fa-circle text-success',
+            'easy'      => 'fa-circle text-primary',
+            'medium'    => 'fa-circle text-warning',
+            'difficult' => 'fa-circle text-danger'
+        ];
+        $routesByDifficulty = $this->getRoutesByDifficulty();
+        $bikeparkRouteBanner = $smarty->fetch(
+            $this->plugin->getPaths()->getFrontendPath() . 'template/bikepark-route-banner.tpl',
+            [
+                'routeModel'          => $this,
+                'langVars'            => $this->plugin->getLocalization(),
+                'difficultyLabels'    => $difficultyLabels,
+                'difficultyIcons'     => $difficultyIcons,
+                'routesByDifficulty'  => $routesByDifficulty,
+            ]
+        );
+
+        return $bikeparkRouteBanner;
+    }
+
+    public function getTrackmapView()
+    {
+        $smarty =  Shop::Smarty();
+        $routes = $this->getAll(withAssociated: true);
+
+        if (is_array($routes) && count($routes)) {
+            foreach ($routes as $k => $routeItem) {
+                if (empty($routeItem['geo']) || !isset($routeItem['geo']['id'])) {
+                    unset($routes[$k]);
+                }
+            }
+            $routes = array_values($routes);
+        }
+        $difficultyLabels = $this->getDifficultyLevels();
+        $availabilityLabels = $this->getAvailabilityStatuses();
+        $routesByDifficulty = $this->getRoutesByDifficulty();
+
+        $frontedUrl = URL_SHOP . '/' . \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend';
+
+        $trackmap = $smarty->fetch(
+            $this->plugin->getPaths()->getFrontendPath() . 'template/bikepark-trackmap.tpl',
+            [
+                'frontedUrl'    => $frontedUrl,
+                'routes'            => $routes,
+                'routesByDifficulty' => $routesByDifficulty,
+                'difficultyLabels'  => $difficultyLabels,
+                'availabilityLabels' => $availabilityLabels,
+            ]
+        );
+
+        return $trackmap;
+    }
 }
