@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{$frontUrl}/css/lightbox.min.css">
 
-<div class="modal-dialog modal-lg modal-dialog-centered" >
+<div class="modal-dialog modal modal-lg modal-dialog-centered" >
     <div class="modal-content">
         <input type="hidden" id="geo_type" value="{$route.geo.geo_type}">
         {if $route.geo.geo_type == 'coordinates'}
@@ -13,7 +13,9 @@
             <h5 class="modal-title fw-bold" id="routeDetailsModalLabel">
                 <i class="fa fa-route me-2 text-primary"></i>{$route.name}
             </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<button type="button" class="btn btn-link close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true"><i class="fa fa-times"></i></span>
+			</button>
         </div>
 
         <div class="modal-body">
@@ -82,17 +84,17 @@
                      aria-labelledby="tab-link-details">
 
                     {if $route.short_description}
-                    <div class="mb-2">
+                    <div class="mb-4">
                         <i class="fa fa-file-alt me-1 text-muted"></i>
-                        <strong>Kurzbeschreibung :</strong>
+                        <strong>Kurzbeschreibung</strong>
                         <br/>{$route.short_description}
                     </div>
                     {/if}
 
                     {if $route.description}
-                    <div class="mb-2">
+                    <div class="mb-4">
                         <i class="fa fa-align-left me-1 text-muted"></i>
-                        <strong>Beschreibung :</strong>:
+                        <strong>Beschreibung</strong>
                         <br/>{$route.description}
                     </div>
                     {/if}
@@ -105,7 +107,7 @@
                     {/if}
 
                     {if $route.tags|@count}
-                    <div class="mt-3">
+                    <div class="mt-4">
                         <strong>
                             <i class="fa fa-tags me-1 text-muted"></i>Stichworte :
                         </strong>
