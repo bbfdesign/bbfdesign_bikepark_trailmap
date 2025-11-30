@@ -3,27 +3,42 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card">
+
       <div class="card-header bbf-card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Routes</h5>
+        <h5 class="mb-0">{$langVars->getTranslation('routes', $adminLang)}</h5>
+
         <button type="button" class="btn btn-success" onclick="openCreateRouteModal()">
-          <i class="fa fa-plus"></i> Create New Route
+          <i class="fa fa-plus"></i>
+          {$langVars->getTranslation('create_new_route', $adminLang)}
         </button>
       </div>
+
       <div class="card-body">
+
+        <!-- FILTERS -->
         <div class="row mb-3">
           <div class="col-md-3">
-            <label for="filterDifficulty">Filter Difficulty</label>
+            <label for="filterDifficulty">
+              {$langVars->getTranslation('filter_difficulty', $adminLang)}
+            </label>
             <select id="filterDifficulty" class="form-control">
-              <option value="">All</option>
+              <option value="">
+                {$langVars->getTranslation('all', $adminLang)}
+              </option>
               {foreach $difficultyLevels as $key => $value}
                 <option value="{$value}">{$value}</option>
               {/foreach}
             </select>
           </div>
+
           <div class="col-md-3">
-            <label for="filterStatus">Filter Status</label>
+            <label for="filterStatus">
+              {$langVars->getTranslation('filter_status', $adminLang)}
+            </label>
             <select id="filterStatus" class="form-control">
-              <option value="">All</option>
+              <option value="">
+                {$langVars->getTranslation('all', $adminLang)}
+              </option>
               {foreach $statuses as $key => $value}
                 <option value="{$value}">{$value}</option>
               {/foreach}
@@ -31,36 +46,38 @@
           </div>
         </div>
 
+        <!-- TABLE -->
         <div class="table-responsive">
           <table class="table table-hovered" id="routes-table">
             <thead class="thead-sticky">
               <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>External ID</th>
-                <th>Status</th>
-                <th>Difficulty</th>
-                <th>Sequence</th>
-                <th>Created At</th>
-                <th>Action</th>
+                <th>{$langVars->getTranslation('name', $adminLang)}</th>
+                <th>{$langVars->getTranslation('external_id', $adminLang)}</th>
+                <th>{$langVars->getTranslation('status', $adminLang)}</th>
+                <th>{$langVars->getTranslation('difficulty', $adminLang)}</th>
+                <th>{$langVars->getTranslation('sort_order', $adminLang)}</th>
+                <th>{$langVars->getTranslation('created_at', $adminLang)}</th>
+                <th>{$langVars->getTranslation('action', $adminLang)}</th>
               </tr>
             </thead>
+
             <tbody>
               {foreach $routes as $route}
               <tr>
                 <td>{$route.id}</td>
                 <td>{$route.name}</td>
                 <td>{$route.external_id}</td>
-                <td>
-                  {$route.status}
-                </td>
+                <td>{$route.status}</td>
                 <td>{$difficultyLevels[$route.difficulty]|default:$route.difficulty}</td>
                 <td>{$route.sequence}</td>
                 <td>{$route.created_at|date_format:"%d-%m-%Y %H:%M"}</td>
+
                 <td>
                   <button class="btn btn-sm btn-primary" onclick="editRoute({$route.id})">
                     <i class="fa fa-pencil"></i>
                   </button>
+
                   <button class="btn btn-sm btn-danger" onclick="deleteRoute({$route.id})">
                     <i class="fa fa-trash"></i>
                   </button>
@@ -70,153 +87,203 @@
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<!-- Add Route Modal -->
-<div class="modal fade" id="createRouteModal" tabindex="-1" aria-labelledby="createRouteModalLabel" aria-hidden="true">
+<!-- ADD ROUTE MODAL -->
+<div class="modal fade" id="createRouteModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <form id="createRouteForm">
+
         <div class="modal-header">
-          <h5 class="modal-title" id="createRouteModalLabel">Create New Route</h5>
+          <h5 class="modal-title">
+            {$langVars->getTranslation('create_new_route', $adminLang)}
+          </h5>
         </div>
+
         <div class="modal-body">
+
           <input type="hidden" name="is_ajax" value="1">
           <input type="hidden" name="action" value="addRoute">
           {$jtl_token}
+
           <div class="row g-3">
+
             <div class="col-md-6">
-              <label>Name</label>
+              <label>{$langVars->getTranslation('name', $adminLang)}</label>
               <input type="text" name="name" class="form-control" required>
             </div>
+
             <div class="col-md-6">
-              <label>External ID</label>
+              <label>{$langVars->getTranslation('external_id', $adminLang)}</label>
               <input type="text" name="external_id" class="form-control" required>
             </div>
+
             <div class="col-md-6">
-              <label>Difficulty</label>
+              <label>{$langVars->getTranslation('difficulty', $adminLang)}</label>
               <select name="difficulty" class="form-control" required>
                 {foreach $difficultyLevels as $key => $value}
                   <option value="{$key}">{$value}</option>
                 {/foreach}
               </select>
             </div>
+
             <div class="col-md-6">
-              <label>Status</label>
+              <label>{$langVars->getTranslation('status', $adminLang)}</label>
               <select name="status" class="form-control" required>
                 {foreach $statuses as $key => $value}
                   <option value="{$key}">{$value}</option>
                 {/foreach}
               </select>
             </div>
+
             <div class="col-md-6">
-              <label>Sequence</label>
+              <label>{$langVars->getTranslation('sort_order', $adminLang)}</label>
               <input type="number" name="sequence" class="form-control" min="1">
             </div>
+
             <div class="col-md-12">
-              <label>Short Description</label>
-              <textarea name="short_description" class="form-control"></textarea>
+              <label>{$langVars->getTranslation('short_description', $adminLang)}</label>
+              <textarea name="short_description" class="form-control tinymce"></textarea>
             </div>
+
             <div class="col-md-12">
-              <label>Description</label>
-              <textarea name="description" class="form-control"></textarea>
+              <label>{$langVars->getTranslation('description', $adminLang)}</label>
+              <textarea name="description" class="form-control tinymce"></textarea>
             </div>
+
             <div class="col-md-12">
-              <label>Warning</label>
+              <label>{$langVars->getTranslation('warnings', $adminLang)}</label>
               <textarea name="warning" class="form-control"></textarea>
             </div>
+
             <div class="col-md-12">
-              <label>Tags</label>
+              <label>{$langVars->getTranslation('tags', $adminLang)}</label>
               <select name="tags[]" id="tagsSelect" class="form-control" multiple>
                 {foreach $tags as $tag}
                   <option value="{$tag.id}">{$tag.name}</option>
                 {/foreach}
               </select>
-              <small class="text-muted">You can select multiple tags or create new ones by typing and pressing enter.</small>
+
+              <small class="text-muted">
+                {$langVars->getTranslation('add_tag', $adminLang)}
+              </small>
             </div>
+
           </div>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="saveCreateRouteForm()">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            {$langVars->getTranslation('close', $adminLang)}
+          </button>
+          <button type="button" class="btn btn-primary" onclick="saveCreateRouteForm()">
+            {$langVars->getTranslation('save', $adminLang)}
+          </button>
         </div>
+
       </form>
     </div>
   </div>
 </div>
 
-<!-- Edit Route Modal -->
-<div class="modal fade" id="editRouteModal" tabindex="-1" aria-labelledby="editRouteModalLabel" aria-hidden="true">
+<!-- EDIT ROUTE MODAL -->
+<div class="modal fade" id="editRouteModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <form id="editRouteForm">
+
         <div class="modal-header">
-          <h5 class="modal-title" id="editRouteModalLabel">Edit Route</h5>
+          <h5 class="modal-title">
+            {$langVars->getTranslation('route', $adminLang)}
+          </h5>
         </div>
+
         <div class="modal-body">
+
           <input type="hidden" name="is_ajax" value="1">
           <input type="hidden" name="action" value="updateRoute">
           <input type="hidden" name="route_id" id="edit_route_id">
           {$jtl_token}
+
           <div class="row g-3">
+
             <div class="col-md-6">
-              <label>Name</label>
+              <label>{$langVars->getTranslation('name', $adminLang)}</label>
               <input type="text" name="name" id="edit_name" class="form-control" required>
             </div>
+
             <div class="col-md-6">
-              <label>External ID</label>
+              <label>{$langVars->getTranslation('external_id', $adminLang)}</label>
               <input type="text" name="external_id" id="edit_external_id" class="form-control" required>
             </div>
+
             <div class="col-md-6">
-              <label>Difficulty</label>
+              <label>{$langVars->getTranslation('difficulty', $adminLang)}</label>
               <select name="difficulty" id="edit_difficulty" class="form-control" required>
                 {foreach $difficultyLevels as $key => $value}
                   <option value="{$key}">{$value}</option>
                 {/foreach}
               </select>
             </div>
+
             <div class="col-md-6">
-              <label>Status</label>
+              <label>{$langVars->getTranslation('status', $adminLang)}</label>
               <select name="status" id="edit_status" class="form-control" required>
                 {foreach $statuses as $key => $value}
                   <option value="{$key}">{$value}</option>
                 {/foreach}
               </select>
             </div>
+
             <div class="col-md-6">
-              <label>Sequence</label>
+              <label>{$langVars->getTranslation('sort_order', $adminLang)}</label>
               <input type="number" name="sequence" id="edit_sequence" class="form-control" min="1">
             </div>
+
             <div class="col-md-12">
-              <label>Short Description</label>
-              <textarea name="short_description" id="edit_short_description" class="form-control"></textarea>
+              <label>{$langVars->getTranslation('short_description', $adminLang)}</label>
+              <textarea name="short_description" id="edit_short_description" class="form-control tinymce"></textarea>
             </div>
+
             <div class="col-md-12">
-              <label>Description</label>
-              <textarea name="description" id="edit_description" class="form-control"></textarea>
+              <label>{$langVars->getTranslation('description', $adminLang)}</label>
+              <textarea name="description" id="edit_description" class="form-control tinymce"></textarea>
             </div>
+
             <div class="col-md-12">
-              <label>Warning</label>
+              <label>{$langVars->getTranslation('warnings', $adminLang)}</label>
               <textarea name="warning" id="edit_warning" class="form-control"></textarea>
             </div>
+
             <div class="col-md-12">
-              <label>Tags</label>
+              <label>{$langVars->getTranslation('tags', $adminLang)}</label>
               <select name="tags[]" id="editTagsSelect" class="form-control" multiple>
                 {foreach $tags as $tag}
                   <option value="{$tag.id}">{$tag.name}</option>
                 {/foreach}
               </select>
-              <small class="text-muted">You can select multiple tags or create new ones by typing and pressing enter.</small>
+              <small class="text-muted">
+                {$langVars->getTranslation('add_tag', $adminLang)}
+              </small>
             </div>
+
           </div>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="saveEditRouteForm()">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            {$langVars->getTranslation('close', $adminLang)}
+          </button>
+          <button type="button" class="btn btn-primary" onclick="saveEditRouteForm()">
+            {$langVars->getTranslation('save', $adminLang)}
+          </button>
         </div>
+
       </form>
     </div>
   </div>
@@ -226,6 +293,7 @@
 <script>
   $(document).ready(function () {
     var table = $('#routes-table').DataTable({
+      "language": datatableLangVariables,
       "order": [[0, "desc"]]
     });
 
@@ -252,7 +320,7 @@
     $('#tagsSelect').select2({
       tags: true,
       tokenSeparators: [','],
-      placeholder: 'Select or create tags',
+      placeholder: "{$langVars->getTranslation('select_or_create_tags', $adminLang)}",
       width: '100%',
       dropdownParent: $('#createRouteModal')
     });
@@ -260,17 +328,21 @@
     $('#editTagsSelect').select2({
       tags: true,
       tokenSeparators: [','],
-      placeholder: 'Select or create tags',
+      placeholder: "{$langVars->getTranslation('select_or_create_tags', $adminLang)}",
       width: '100%',
       dropdownParent: $('#editRouteModal')
     });
   });
 
   function openCreateRouteModal() {
+    setTimeout(() => {
+      initTinyMCE();
+    }, 500);
     $('#createRouteModal').modal('show');
   }
 
   function saveCreateRouteForm() {
+    tinymce.triggerSave();
     $.ajax({
       url: postURL,
       type: 'POST',
@@ -325,6 +397,10 @@
             $("#editTagsSelect").val(null).trigger("change");
           }
           $('#editRouteModal').modal('show');
+          setTimeout(() => {
+            initTinyMCE();
+          }, 500);
+
         } else {
           bbdNotify("Error", "Route not found.", "danger", "fa fa-exclamation-triangle");
         }
@@ -333,6 +409,8 @@
   }
 
   function saveEditRouteForm() {
+    tinymce.triggerSave();
+    
     $.ajax({
       url: postURL,
       type: 'POST',
@@ -355,7 +433,7 @@
   }
 
   function deleteRoute(routeId) {
-    if (confirm("Are you sure you want to delete this route?")) {
+   if (!confirm("{$langVars->getTranslation('delete_route_confirm', $adminLang)}")) {
       $.ajax({
         url: postURL,
         type: 'POST',

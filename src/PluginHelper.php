@@ -159,19 +159,22 @@ class PluginHelper
 
     public static function getDatatableLanguageVariables($pluginLocalization): array
     {
+        $adminLang = ($_SESSION['AdminAccount']->language == 'de-DE') ? 'ger' : 'eng';
+
         $variables = [
-            'emptyTable' => $pluginLocalization->getTranslation('datatable_emptyTable'),
-            'lengthMenu' => $pluginLocalization->getTranslation('datatable_lengthMenu'),
-            'info' => $pluginLocalization->getTranslation('datatable_info'),
-            'zeroRecords' => $pluginLocalization->getTranslation('datatable_zeroRecords'),
-            'search' => $pluginLocalization->getTranslation('datatable_search'),
-            'sInfoEmpty' => $pluginLocalization->getTranslation('datatable_sInfoEmpty'),
-            'sInfoFiltered' => $pluginLocalization->getTranslation('datatable_sInfoFiltered'),
+            'emptyTable' => $pluginLocalization->getTranslation('datatable_emptyTable', $adminLang),
+            'lengthMenu' => $pluginLocalization->getTranslation('datatable_lengthMenu', $adminLang),
+            'info' => $pluginLocalization->getTranslation('datatable_info', $adminLang),
+            'zeroRecords' => $pluginLocalization->getTranslation('datatable_zeroRecords', $adminLang),
+            'search' => $pluginLocalization->getTranslation('datatable_search', $adminLang),
+            'sInfoEmpty' => $pluginLocalization->getTranslation('datatable_sInfoEmpty', $adminLang),
+            'sInfoFiltered' => $pluginLocalization->getTranslation('datatable_sInfoFiltered', $adminLang),
             'paginate' => [
-                'previous' => $pluginLocalization->getTranslation('datatable_previous'),
-                'next' => $pluginLocalization->getTranslation('datatable_next'),
+                'previous' => $pluginLocalization->getTranslation('datatable_previous', $adminLang),
+                'next' => $pluginLocalization->getTranslation('datatable_next', $adminLang),
             ]
         ];
+
         return $variables;
     }
 

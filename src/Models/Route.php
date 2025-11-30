@@ -208,43 +208,42 @@ class Route
 
         return $route;
     }
-
     public function create(array $data): array
     {
         if (empty($data['name'])) {
-            $this->errors[] = "Please enter name";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('enter_name');
         }
         if (empty($data['external_id'])) {
-            $this->errors[] = "Please enter external ID";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('enter_external_id');
         }
         if (empty($data['status'])) {
-            $this->errors[] = "Please select status";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('select_status');
         }
         if (empty($data['difficulty'])) {
-            $this->errors[] = "Please select difficulty";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('select_difficulty');
         }
         if (isset($data['sequence']) && !is_numeric($data['sequence'])) {
-            $this->errors[] = "Sequence must be a number";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('sequence_must_be_number');
         }
 
         if (count($this->errors)) {
             return [
-                'flag' => false,
+                'flag'   => false,
                 'errors' => $this->errors
             ];
         }
 
         try {
             $record = (object)[
-                'name' => $data['name'] ?? null,
-                'external_id' => $data['external_id'] ?? null,
-                'status' => $data['status'] ?? null,
-                'difficulty' => $data['difficulty'] ?? null,
-                'sequence' => $data['sequence'] ?? null,
-                'warning' => $data['warning'] ?? null,
-                'short_description' => $data['short_description'] ?? null,
-                'description' => $data['description'] ?? null,
-                'created_at' => date('Y-m-d H:i:s')
+                'name'              => $data['name'] ?? null,
+                'external_id'       => $data['external_id'] ?? null,
+                'status'            => $data['status'] ?? null,
+                'difficulty'        => $data['difficulty'] ?? null,
+                'sequence'          => $data['sequence'] ?? null,
+                'warning'           => $data['warning'] ?? null,
+                'short_description' => $_POST['short_description'] ?? null,
+                'description'       => $_POST['description'] ?? null,
+                'created_at'        => date('Y-m-d H:i:s')
             ];
 
             $routeId = $this->db->insert(self::TABLE, $record);
@@ -264,13 +263,18 @@ class Route
 
                     $this->createTagMap([
                         'route_id' => $routeId,
-                        'tag_id' => $tagId
+                        'tag_id'   => $tagId
                     ]);
                 }
             }
 
             $this->db->commit();
-            return ['flag' => true, 'id' => $routeId, 'message' => 'Route added successfully'];
+
+            return [
+                'flag'    => true,
+                'id'      => $routeId,
+                'message' => $this->plugin->getLocalization()->getTranslation('route_added_successfully')
+            ];
         } catch (Exception $e) {
             $this->db->rollback();
             return ['flag' => false, 'errors' => [$e->getMessage()]];
@@ -280,47 +284,45 @@ class Route
     public function update(int $id, array $data): array
     {
         if (empty($data['name'])) {
-            $this->errors[] = "Please enter name";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('enter_name');
         }
         if (empty($data['external_id'])) {
-            $this->errors[] = "Please enter external ID";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('enter_external_id');
         }
         if (empty($data['status'])) {
-            $this->errors[] = "Please select status";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('select_status');
         }
         if (empty($data['difficulty'])) {
-            $this->errors[] = "Please select difficulty";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('select_difficulty');
         }
         if (isset($data['sequence']) && !is_numeric($data['sequence'])) {
-            $this->errors[] = "Sequence must be a number";
+            $this->errors[] = $this->plugin->getLocalization()->getTranslation('sequence_must_be_number');
         }
 
         if (count($this->errors)) {
             return [
-                'flag' => false,
+                'flag'   => false,
                 'errors' => $this->errors
             ];
         }
 
         try {
             $this->db->update(self::TABLE, 'id', $id, (object)[
-                'name' => $data['name'] ?? null,
-                'external_id' => $data['external_id'] ?? null,
-                'status' => $data['status'] ?? null,
-                'difficulty' => $data['difficulty'] ?? null,
-                'sequence' => $data['sequence'] ?? null,
-                'warning' => $data['warning'] ?? null,
-                'short_description' => $data['short_description'] ?? null,
-                'description' => $data['description'] ?? null
+                'name'              => $data['name'] ?? null,
+                'external_id'       => $data['external_id'] ?? null,
+                'status'            => $data['status'] ?? null,
+                'difficulty'        => $data['difficulty'] ?? null,
+                'sequence'          => $data['sequence'] ?? null,
+                'warning'           => $data['warning'] ?? null,
+                'short_description' => $_POST['short_description'] ?? null,
+                'description'       => $_POST['description'] ?? null
             ]);
 
             if (isset($data['tags'])) {
-                // Correct DELETE query to remove old tag mappings
+
                 $this->db->queryPrepared(
                     'DELETE FROM ' . self::TABLE_ROUTE_TAGS . ' WHERE route_id = :route_id',
-                    [
-                        'route_id' => (int)$id
-                    ]
+                    ['route_id' => (int)$id]
                 );
 
                 foreach ($data['tags'] as $tag) {
@@ -337,36 +339,40 @@ class Route
 
                     $this->createTagMap([
                         'route_id' => $id,
-                        'tag_id' => $tagId
+                        'tag_id'   => $tagId
                     ]);
                 }
             }
 
-            return ['flag' => true, 'message' => 'Route updated successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('route_updated_successfully')
+            ];
         } catch (Exception $e) {
             $this->db->rollback();
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
 
-
-
     public function delete(int $id): array
     {
         try {
             $this->db->delete(self::TABLE, 'id', $id);
+
             $this->db->queryPrepared(
-                'DELETE * FROM ' . self::TABLE_ROUTE_TAGS . ' WHERE route_id = :route_id',
-                [
-                    'route_id' => (int)$id
-                ]
+                'DELETE FROM ' . self::TABLE_ROUTE_TAGS . ' WHERE route_id = :route_id',
+                ['route_id' => (int)$id]
             );
-            $this->response = ['flag' => true, 'message' => 'Route deleted successfully'];
+
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('route_deleted_successfully')
+            ];
         } catch (Exception $e) {
-            $this->response = ['flag' => false, 'errors' => [$e->getMessage()]];
+            return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
-        return $this->response;
     }
+
 
     public function getAllGallery(?int $routeId = null): array | bool
     {
@@ -411,41 +417,48 @@ class Route
             if (!$data['is_external']) {
                 $name = $_FILES["image_file"]["name"];
                 $tmpName = explode(".", $name);
-                $ext = $tmpName[count($tmpName) - 1];
+                $ext = strtolower($tmpName[count($tmpName) - 1]);
 
                 $allowedExtensions = ['jpg', 'jpeg', 'png', 'svg'];
                 if (!in_array($ext, $allowedExtensions)) {
-                    $this->response['flag'] = false;
-                    $this->response['errors'] = [$this->plugin->getLocalization()->getTranslation('invalid_file_upload')];
-                    return $this->response;
+                    return [
+                        'flag'   => false,
+                        'errors' => [$this->plugin->getLocalization()->getTranslation('invalid_image_extension')]
+                    ];
                 }
-                $pluginFrontDir = \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend/gallery/';
 
+                $pluginFrontDir = \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend/gallery/';
                 $uploadPath = \PFAD_ROOT . $pluginFrontDir;
 
                 if (!is_dir($uploadPath)) {
                     mkdir($uploadPath, 0755, true);
                 }
 
-                $newFilename =  time() . '.' . $ext;
+                $newFilename = time() . '.' . $ext;
 
                 if (file_exists($uploadPath . $newFilename)) {
                     unlink($uploadPath . $newFilename);
                 }
 
                 PluginHelper::uploadFile('image_file', $uploadPath, $newFilename);
-                $image_url = Shop::getURL() . '/' . $pluginFrontDir  . $newFilename;
+                $image_url = Shop::getURL() . '/' . $pluginFrontDir . $newFilename;
             }
 
             $record = (object)[
-                'route_id'   => $data['route_id'] ?? null,
-                'image_url'  => $image_url,
-                'alt'        => $data['alt'] ?? null,
-                'sort_order' => $data['sort_order'] ?? null,
+                'route_id'    => $data['route_id'] ?? null,
+                'image_url'   => $image_url,
+                'alt'         => $data['alt'] ?? null,
+                'sort_order'  => $data['sort_order'] ?? null,
+                'is_external' => $data['is_external'] ?? 0,
             ];
 
             $id = $this->db->insert(self::TABLE_GALLERY, $record);
-            return ['flag' => true, 'id' => $id, 'message' => 'Gallery item added successfully'];
+
+            return [
+                'flag'    => true,
+                'id'      => $id,
+                'message' => $this->plugin->getLocalization()->getTranslation('gallery_item_added_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
@@ -459,22 +472,25 @@ class Route
         try {
             $pluginFrontDir = \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend/gallery/';
             $uploadPath = \PFAD_ROOT . $pluginFrontDir;
+
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
 
-            $gallery = $this->getGalleryById((int) $id);
+            $gallery = $this->getGalleryById((int)$id);
             if (is_null($gallery)) {
-                return ['flag' => false, 'errors' => ['Record not found']];
+                return [
+                    'flag'   => false,
+                    'errors' => [$this->plugin->getLocalization()->getTranslation('record_not_found')]
+                ];
             }
 
             $image_url = $data['image_url'] ?? null;
 
             if (!$data['is_external']) {
-                // delete previous file
-                if (! $gallery['is_external']) {
-                    $filename = basename($gallery['image_url']);
 
+                if (!$gallery['is_external']) {
+                    $filename = basename($gallery['image_url']);
                     if (file_exists($uploadPath . $filename)) {
                         unlink($uploadPath . $filename);
                     }
@@ -482,28 +498,33 @@ class Route
 
                 $name = $_FILES["image_file"]["name"];
                 $tmpName = explode(".", $name);
-                $ext = $tmpName[count($tmpName) - 1];
+                $ext = strtolower($tmpName[count($tmpName) - 1]);
 
                 $allowedExtensions = ['jpg', 'jpeg', 'png', 'svg'];
                 if (!in_array($ext, $allowedExtensions)) {
-                    $this->response['flag'] = false;
-                    $this->response['errors'] = [$this->plugin->getLocalization()->getTranslation('invalid_file_upload')];
-                    return $this->response;
+                    return [
+                        'flag'   => false,
+                        'errors' => [$this->plugin->getLocalization()->getTranslation('invalid_image_extension')]
+                    ];
                 }
 
-                $newFilename =  time() . '.' . $ext;
-
+                $newFilename = time() . '.' . $ext;
                 PluginHelper::uploadFile('image_file', $uploadPath, $newFilename);
-                $image_url = Shop::getURL() . '/' . $pluginFrontDir  . $newFilename;
+
+                $image_url = Shop::getURL() . '/' . $pluginFrontDir . $newFilename;
             }
 
             $this->db->update(self::TABLE_GALLERY, 'id', $id, (object)[
-                'image_url'  => $image_url,
-                'alt'        => $data['alt'] ?? null,
-                'sort_order' => $data['sort_order'] ?? null,
+                'image_url'   => $image_url,
+                'alt'         => $data['alt'] ?? null,
+                'sort_order'  => $data['sort_order'] ?? null,
+                'is_external' => $data['is_external'] ?? 0,
             ]);
 
-            return ['flag' => true, 'message' => 'Gallery item updated successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('gallery_item_updated_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
@@ -516,11 +537,15 @@ class Route
     {
         try {
             $this->db->delete(self::TABLE_GALLERY, 'id', $id);
-            return ['flag' => true, 'message' => 'Gallery item deleted successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('gallery_item_deleted_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
+
 
     /**
      * Get video by ID
@@ -542,30 +567,31 @@ class Route
         $errors = [];
 
         if (empty($data['route_id'])) {
-            $errors[] = "Please select a route";
+            $errors[] = $this->plugin->getLocalization()->getTranslation('please_select_route');
         }
+
         if (empty($data['provider']) || !in_array($data['provider'], ['self_hosted', 'youtube', 'vimeo', 'embedded_code'])) {
-            $errors[] = "Please select a valid provider";
+            $errors[] = $this->plugin->getLocalization()->getTranslation('please_select_valid_provider');
         }
 
         if ($data['provider'] === 'self_hosted') {
             if (empty($_FILES['video_file']) || $_FILES['video_file']['error'] !== UPLOAD_ERR_OK) {
-                $errors[] = "Please upload a video file";
+                $errors[] = $this->plugin->getLocalization()->getTranslation('please_upload_video_file');
             } else {
                 $allowedExtensions = ['mp4', 'webm', 'ogv', 'avi', 'mov'];
                 $ext = strtolower(pathinfo($_FILES['video_file']['name'], PATHINFO_EXTENSION));
                 if (!in_array($ext, $allowedExtensions)) {
-                    $errors[] = "Invalid video file extension";
+                    $errors[] = $this->plugin->getLocalization()->getTranslation('invalid_video_extension');
                 }
             }
         } else {
             if (empty($_POST['value'])) {
-                $errors[] = "Please provide the video ID or embed code";
+                $errors[] = $this->plugin->getLocalization()->getTranslation('please_provide_video_id_or_embed');
             }
         }
 
         if (isset($data['status']) && !in_array($data['status'], [0, 1])) {
-            $errors[] = "Invalid status";
+            $errors[] = $this->plugin->getLocalization()->getTranslation('invalid_status');
         }
 
         return $errors;
@@ -599,7 +625,10 @@ class Route
 
                 $targetPath = $uploadPath . $newFilename;
                 if (!move_uploaded_file($_FILES['video_file']['tmp_name'], $targetPath)) {
-                    return ['flag' => false, 'errors' => ['Failed to move uploaded video file']];
+                    return [
+                        'flag'   => false,
+                        'errors' => [$this->plugin->getLocalization()->getTranslation('failed_to_move_video')]
+                    ];
                 }
 
                 $value = Shop::getURL() . '/' . $pluginFrontDir . $newFilename;
@@ -613,7 +642,12 @@ class Route
             ];
 
             $id = $this->db->insert(self::TABLE_VIDEOS, $record);
-            return ['flag' => true, 'id' => $id, 'message' => 'Video added successfully'];
+
+            return [
+                'flag'    => true,
+                'id'      => $id,
+                'message' => $this->plugin->getLocalization()->getTranslation('video_added_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
@@ -632,12 +666,18 @@ class Route
         try {
             $video = $this->getVideoById($id);
             if (is_null($video)) {
-                return ['flag' => false, 'errors' => ['Record not found']];
+                return [
+                    'flag' => false,
+                    'errors' => [$this->plugin->getLocalization()->getTranslation('record_not_found')]
+                ];
             }
 
-            $value = $value = $_POST['value'] ?? $video['value'];
+            $value = $_POST['value'] ?? $video['value'];
 
-            if (($data['provider'] ?? $video['provider']) === 'self_hosted' && !empty($_FILES['video_file']) && $_FILES['video_file']['error'] === UPLOAD_ERR_OK) {
+            if (($data['provider'] ?? $video['provider']) === 'self_hosted'
+                && !empty($_FILES['video_file'])
+                && $_FILES['video_file']['error'] === UPLOAD_ERR_OK
+            ) {
                 $pluginFrontDir = \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend/videos/';
                 $uploadPath = \PFAD_ROOT . $pluginFrontDir;
 
@@ -645,7 +685,7 @@ class Route
                     mkdir($uploadPath, 0755, true);
                 }
 
-                // Delete old file if exists
+                // Delete previous file
                 if ($video['provider'] === 'self_hosted' && !empty($video['value'])) {
                     $oldFile = basename($video['value']);
                     $oldFilePath = $uploadPath . $oldFile;
@@ -660,7 +700,10 @@ class Route
                 $targetPath = $uploadPath . $newFilename;
 
                 if (!move_uploaded_file($_FILES['video_file']['tmp_name'], $targetPath)) {
-                    return ['flag' => false, 'errors' => ['Failed to move uploaded video file']];
+                    return [
+                        'flag'   => false,
+                        'errors' => [$this->plugin->getLocalization()->getTranslation('failed_to_move_video')]
+                    ];
                 }
 
                 $value = Shop::getURL() . '/' . $pluginFrontDir . $newFilename;
@@ -673,7 +716,10 @@ class Route
                 'status'   => $data['status'] ?? $video['status'],
             ]);
 
-            return ['flag' => true, 'message' => 'Video updated successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('video_updated_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
@@ -687,7 +733,10 @@ class Route
         try {
             $video = $this->getVideoById($id);
             if ($video === null) {
-                return ['flag' => false, 'errors' => ['Record not found']];
+                return [
+                    'flag'   => false,
+                    'errors' => [$this->plugin->getLocalization()->getTranslation('record_not_found')]
+                ];
             }
 
             if ($video['provider'] === 'self_hosted' && !empty($video['value'])) {
@@ -702,11 +751,16 @@ class Route
             }
 
             $this->db->delete(self::TABLE_VIDEOS, 'id', $id);
-            return ['flag' => true, 'message' => 'Video deleted successfully'];
+
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('video_deleted_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
+
 
     public function getGeoById(int $id): ?array
     {
@@ -716,32 +770,31 @@ class Route
             ReturnType::SINGLE_ASSOC_ARRAY
         ) ?: null;
     }
-
     public function createGeo(array $data): array
     {
         $errors = [];
 
         if (empty($data['route_id'])) {
-            $errors[] = "Please select a route";
+            $errors[] = $this->plugin->getLocalization()->getTranslation('please_select_route');
         }
 
         if (empty($data['geo_type']) || !in_array($data['geo_type'], ['json', 'gpx_file'])) {
-            $errors[] = "Please select a valid geo type";
+            $errors[] = $this->plugin->getLocalization()->getTranslation('please_select_valid_geo_type');
         }
 
         // Validate coordinates or file depending on geo_type
         if ($data['geo_type'] === 'json') {
             if (empty($data['coordinates'])) {
-                $errors[] = "Please provide coordinates as JSON";
+                $errors[] = $this->plugin->getLocalization()->getTranslation('please_provide_coordinates_json');
             }
         } elseif ($data['geo_type'] === 'gpx_file') {
             if (empty($_FILES['file_url']) || $_FILES['file_url']['error'] !== UPLOAD_ERR_OK) {
-                $errors[] = "Please upload a GPX file";
+                $errors[] = $this->plugin->getLocalization()->getTranslation('please_upload_gpx');
             } else {
                 $allowedExtensions = ['gpx'];
                 $ext = strtolower(pathinfo($_FILES['file_url']['name'], PATHINFO_EXTENSION));
                 if (!in_array($ext, $allowedExtensions)) {
-                    $errors[] = "Invalid file type. Only .gpx allowed";
+                    $errors[] = $this->plugin->getLocalization()->getTranslation('invalid_gpx_file');
                 }
             }
         }
@@ -767,32 +820,41 @@ class Route
 
                 $targetPath = $uploadPath . $newFilename;
                 if (!move_uploaded_file($_FILES['file_url']['tmp_name'], $targetPath)) {
-                    return ['flag' => false, 'errors' => ['Failed to move uploaded GPX file']];
+                    return [
+                        'flag'   => false,
+                        'errors' => [$this->plugin->getLocalization()->getTranslation('failed_to_move_gpx')]
+                    ];
                 }
 
                 $fileUrl = Shop::getURL() . '/' . $pluginFrontDir . $newFilename;
             }
 
             $record = (object)[
-                'route_id' => $data['route_id'],
-                'geo_type' => $data['geo_type'],
+                'route_id'    => $data['route_id'],
+                'geo_type'    => $data['geo_type'],
                 'coordinates' => $data['geo_type'] === 'json' ? $data['coordinates'] : null,
-                'file_url' => $fileUrl
+                'file_url'    => $fileUrl
             ];
 
             $id = $this->db->insert(self::TABLE_GEO, $record);
-            return ['flag' => true, 'id' => $id, 'message' => 'Geo record added successfully'];
+
+            return [
+                'flag'    => true,
+                'id'      => $id,
+                'message' => $this->plugin->getLocalization()->getTranslation('geo_added_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
+
 
     public function updateGeo(int $id, array $data): array
     {
         $errors = [];
 
         if (empty($data['geo_type']) || !in_array($data['geo_type'], ['json', 'gpx_file'])) {
-            $errors[] = "Please select a valid geo type";
+            $errors[] = $this->plugin->getLocalization()->getTranslation('please_select_valid_geo_type');
         }
 
         // Fetch existing record to handle file replacement
@@ -803,22 +865,25 @@ class Route
         );
 
         if (!$existing) {
-            return ['flag' => false, 'errors' => ['Record not found']];
+            return [
+                'flag'   => false,
+                'errors' => [$this->plugin->getLocalization()->getTranslation('record_not_found')]
+            ];
         }
 
         if ($data['geo_type'] === 'json') {
             if (empty($data['coordinates'])) {
-                $errors[] = "Please provide coordinates as JSON";
+                $errors[] = $this->plugin->getLocalization()->getTranslation('please_provide_coordinates_json');
             }
         } elseif ($data['geo_type'] === 'gpx_file') {
             if (!empty($_FILES['file_url']) && $_FILES['file_url']['error'] === UPLOAD_ERR_OK) {
                 $allowedExtensions = ['gpx'];
                 $ext = strtolower(pathinfo($_FILES['file_url']['name'], PATHINFO_EXTENSION));
                 if (!in_array($ext, $allowedExtensions)) {
-                    $errors[] = "Invalid file type. Only .gpx allowed";
+                    $errors[] = $this->plugin->getLocalization()->getTranslation('invalid_gpx_file');
                 }
             } elseif (empty($existing['file_url'])) {
-                $errors[] = "Please upload a GPX file";
+                $errors[] = $this->plugin->getLocalization()->getTranslation('please_upload_gpx');
             }
         }
 
@@ -829,7 +894,11 @@ class Route
         try {
             $fileUrl = $existing['file_url'];
 
-            if ($data['geo_type'] === 'gpx_file' && !empty($_FILES['file_url']) && $_FILES['file_url']['error'] === UPLOAD_ERR_OK) {
+            if (
+                $data['geo_type'] === 'gpx_file'
+                && !empty($_FILES['file_url'])
+                && $_FILES['file_url']['error'] === UPLOAD_ERR_OK
+            ) {
                 $pluginFrontDir = \PLUGIN_DIR . PluginHelper::PLUGIN_ID . '/frontend/geo/';
                 $uploadPath = \PFAD_ROOT . $pluginFrontDir;
 
@@ -852,19 +921,25 @@ class Route
                 $targetPath = $uploadPath . $newFilename;
 
                 if (!move_uploaded_file($_FILES['file_url']['tmp_name'], $targetPath)) {
-                    return ['flag' => false, 'errors' => ['Failed to move uploaded GPX file']];
+                    return [
+                        'flag'   => false,
+                        'errors' => [$this->plugin->getLocalization()->getTranslation('failed_to_move_gpx')]
+                    ];
                 }
 
                 $fileUrl = Shop::getURL() . '/' . $pluginFrontDir . $newFilename;
             }
 
             $this->db->update(self::TABLE_GEO, 'id', $id, (object)[
-                'geo_type' => $data['geo_type'],
+                'geo_type'    => $data['geo_type'],
                 'coordinates' => $data['geo_type'] === 'json' ? $data['coordinates'] : null,
-                'file_url' => $fileUrl
+                'file_url'    => $fileUrl
             ]);
 
-            return ['flag' => true, 'message' => 'Geo updated successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('geo_updated_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
@@ -875,11 +950,16 @@ class Route
     {
         try {
             $this->db->delete(self::TABLE_GEO, 'id', $id);
-            return ['flag' => true, 'message' => 'Geo entry deleted successfully'];
+
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('geo_deleted_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
+
 
     public function getAllTags(): array
     {
@@ -907,7 +987,6 @@ class Route
             ReturnType::SINGLE_ASSOC_ARRAY
         ) ?: null;
     }
-
     public function createTag(array $data): array
     {
         try {
@@ -916,7 +995,12 @@ class Route
 
             // Check if slug already exists
             if ($this->getTagBySlug($slug)) {
-                return ['flag' => false, 'errors' => ["Slug '$slug' already exists"]];
+                return [
+                    'flag'   => false,
+                    'errors' => [
+                        $this->plugin->getLocalization()->getTranslation('slug_exists') . " ('$slug')"
+                    ]
+                ];
             }
 
             $record = (object)[
@@ -925,7 +1009,12 @@ class Route
             ];
 
             $id = $this->db->insert(self::TABLE_TAGS, $record);
-            return ['flag' => true, 'id' => $id, 'message' => 'Tag added successfully'];
+
+            return [
+                'flag'    => true,
+                'id'      => $id,
+                'message' => $this->plugin->getLocalization()->getTranslation('tag_added_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
@@ -938,8 +1027,14 @@ class Route
             $slug = $this->slugify($name);
 
             $existingTag = $this->getTagBySlug($slug);
+
             if ($existingTag && (int)$existingTag['id'] !== $id) {
-                return ['flag' => false, 'errors' => ["Slug '$slug' already exists"]];
+                return [
+                    'flag'   => false,
+                    'errors' => [
+                        $this->plugin->getLocalization()->getTranslation('slug_exists') . " ('$slug')"
+                    ]
+                ];
             }
 
             $this->db->update(
@@ -952,18 +1047,13 @@ class Route
                 ]
             );
 
-            return ['flag' => true, 'message' => 'Tag updated successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('tag_updated_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
-    }
-
-
-    private function slugify(string $string): string
-    {
-        $slug = strtolower($string);
-        $slug = preg_replace('/[^a-z0-9]+/i', '-', $slug);
-        return trim($slug, '-');
     }
 
     public function deleteTag(int $id): array
@@ -976,11 +1066,15 @@ class Route
 
             $this->db->delete(self::TABLE_TAGS, 'id', $id);
 
-            return ['flag' => true, 'message' => 'Tag deleted successfully'];
+            return [
+                'flag'    => true,
+                'message' => $this->plugin->getLocalization()->getTranslation('tag_deleted_successfully')
+            ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
     }
+
 
     public function getAllTagMap(): array
     {
@@ -1007,6 +1101,13 @@ class Route
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
         }
+    }
+
+    private function slugify(string $string): string
+    {
+        $slug = strtolower($string);
+        $slug = preg_replace('/[^a-z0-9]+/i', '-', $slug);
+        return trim($slug, '-');
     }
 
     public function getRoutesBannerView($smarty)
