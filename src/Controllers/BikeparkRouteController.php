@@ -54,7 +54,7 @@ class BikeparkRouteController extends AbstractController
     }
 
 
-    public function bikeparkTrakmaps(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
+    public function bikeparkTrackmaps(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
     {
         $this->smarty = $smarty;
         Shop::setPageType(\PAGE_PLUGIN);

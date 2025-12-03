@@ -23,11 +23,13 @@ class Setting
     public const TABLE = PluginHelper::PLUGIN_ID . "_settings";
 
     public const PLUGIN_STATUS = "plugin_status";
+    public const API_AUTH_TOKEN = "api_auth_token";
     public const ROUTE_WIDGET_SELECTOR = "route_widget_selector";
     public const ROUTE_WIDGET_PLACEMENT_METHOD = "route_widget_placement_method";
 
     public const ROUTE_SETTINGS = [
         self::PLUGIN_STATUS => 0,
+        self::API_AUTH_TOKEN => '',
         self::ROUTE_WIDGET_SELECTOR => '',
         self::ROUTE_WIDGET_PLACEMENT_METHOD => '',
     ];
@@ -65,6 +67,15 @@ class Setting
                 ];
                 $this->db->insert(self::TABLE, $upd);
             }
+        }
+
+        if (empty($this->getSetting(self::API_AUTH_TOKEN))) {
+            $this->saveSettings(
+                [self::API_AUTH_TOKEN],
+                [
+                    self::API_AUTH_TOKEN => $this->generateToken()
+                ]
+            );
         }
     }
 
@@ -253,5 +264,10 @@ class Setting
                 $this->db->insert(self::TABLE, $upd);
             }
         }
+    }
+
+    public function generateToken()
+    {
+        return bin2hex(random_bytes(16));
     }
 }

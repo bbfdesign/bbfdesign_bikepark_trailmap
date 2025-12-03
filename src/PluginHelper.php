@@ -30,7 +30,7 @@ class PluginHelper
     public function __construct(?PluginInterface $plugin = null)
     {
         $this->db = Shop::Container()->getDB();
-        $this->plugin = $plugin;
+        $this->plugin = !is_null($plugin) ? $plugin : Helper::getPluginById(self::PLUGIN_ID);
     }
 
     /**

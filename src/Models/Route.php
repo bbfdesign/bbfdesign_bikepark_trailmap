@@ -268,7 +268,6 @@ class Route
                 }
             }
 
-            $this->db->commit();
 
             return [
                 'flag'    => true,
@@ -457,7 +456,7 @@ class Route
             return [
                 'flag'    => true,
                 'id'      => $id,
-                'message' => $this->plugin->getLocalization()->getTranslation('gallery_item_added_successfully')
+                'message' => $this->plugin->getLocalization()->getTranslation('added_successfully')
             ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
@@ -523,7 +522,7 @@ class Route
 
             return [
                 'flag'    => true,
-                'message' => $this->plugin->getLocalization()->getTranslation('gallery_item_updated_successfully')
+                'message' => $this->plugin->getLocalization()->getTranslation('updated_successfully')
             ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
@@ -539,7 +538,7 @@ class Route
             $this->db->delete(self::TABLE_GALLERY, 'id', $id);
             return [
                 'flag'    => true,
-                'message' => $this->plugin->getLocalization()->getTranslation('gallery_item_deleted_successfully')
+                'message' => $this->plugin->getLocalization()->getTranslation('deleted_successfully')
             ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
@@ -646,7 +645,7 @@ class Route
             return [
                 'flag'    => true,
                 'id'      => $id,
-                'message' => $this->plugin->getLocalization()->getTranslation('video_added_successfully')
+                'message' => $this->plugin->getLocalization()->getTranslation('added_successfully')
             ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
@@ -718,7 +717,7 @@ class Route
 
             return [
                 'flag'    => true,
-                'message' => $this->plugin->getLocalization()->getTranslation('video_updated_successfully')
+                'message' => $this->plugin->getLocalization()->getTranslation('updated_successfully')
             ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];
@@ -754,7 +753,7 @@ class Route
 
             return [
                 'flag'    => true,
-                'message' => $this->plugin->getLocalization()->getTranslation('video_deleted_successfully')
+                'message' => $this->plugin->getLocalization()->getTranslation('deleted_successfully')
             ];
         } catch (Exception $e) {
             return ['flag' => false, 'errors' => [$e->getMessage()]];

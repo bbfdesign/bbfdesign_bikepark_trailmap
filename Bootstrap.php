@@ -20,6 +20,7 @@ use BbfdesignBikeParkRoutes\Hooks\IncludeJsCssAssets;
 use BbfdesignBikeParkRoutes\Hooks\SmartyOutputFilter;
 use BbfdesignBikeParkRoutes\Models\Setting;
 use BbfdesignBikeParkRoutes\PluginHelper;
+use BbfdesignBikeParkRoutes\Route;
 use Exception;
 use JTL\Events\Dispatcher;
 use JTL\Plugin\Bootstrapper;
@@ -57,36 +58,14 @@ class Bootstrap extends Bootstrapper
             });
         }
 
-        if (\defined('HOOK_ROUTER_PRE_DISPATCH')) {
-            $dispatcher->listen('shop.hook.' . \HOOK_ROUTER_PRE_DISPATCH, function (array $args) {
-                $this->addRouteToFrontend($args);
-            });
+        if ($pluginSettings[Setting::PLUGIN_STATUS]) {
+            if (\defined('HOOK_ROUTER_PRE_DISPATCH')) {
+                $dispatcher->listen('shop.hook.' . \HOOK_ROUTER_PRE_DISPATCH, function (array $args) use ($plugin, $pluginSettings) {
+                    $route = new Route($args, $plugin, $pluginSettings);
+                    $route->register();
+                });
+            }
         }
-    }
-
-    public function addRouteToFrontend($args)
-    {
-        $router     = $args['router'];
-
-        $bikeparkRouteController = new BikeparkRouteController(
-            $this->getDB(),
-            $this->getCache(),
-            Shop::getState(),
-            Shopsetting::getInstance()->getAll(),
-            Shop::Container()->getAlertService()
-        );
-
-        $router->addRoute(
-            '/get-route-details/{route_id:number}',
-            [$bikeparkRouteController, 'getBikeRouteDetails'],
-            'getBikeRouteDetailsRoute',
-        );
-
-        $router->addRoute(
-            '/bikepark/trakmaps',
-            [$bikeparkRouteController, 'bikeparkTrakmaps'],
-            'bikeparkTrakmapsRoute',
-        );
     }
 
     public function installed()
