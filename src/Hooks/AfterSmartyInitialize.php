@@ -38,9 +38,11 @@ class AfterSmartyInitialize
 
             $routeModel = new Route($this->plugin);
             $bikepark_trackmap = $routeModel->getTrackmapView($routeModel);
+            $bikepark_route_banner = $routeModel->getRoutesBannerView($smarty);
 
             $smarty->assign([
-                'bikepark_trackmap' => $bikepark_trackmap
+                'bikepark_trackmap' => $bikepark_trackmap,
+                'bikepark_route_banner' => $bikepark_route_banner,
             ]);
         } catch (Exception $e) {
             dd($e->getMessage());
